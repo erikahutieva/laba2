@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <style>
+        /* Центрирование формы и стили для всего контейнера */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f3f4f6;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            width: 350px;
+        }
+
+        /* Стили для элементов формы */
+        label {
+            font-weight: bold;
+            color: #4a4a4a;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: #555;
+        }
+
+        /* Кнопка отправки */
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #4a90e2;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #357ab8;
+        }
+
+        /* Ссылка на главную страницу */
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #4a90e2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            color: #357ab8;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Add a New Word</h1>
+        <form method="post">
+            <label for="word1">Original Word:</label>
+            <input type="text" id="word1" name="word1" required>
+
+            <label for="word2">Translation:</label>
+            <input type="text" id="word2" name="word2" required>
+
+            <button type="submit">Submit</button>
+        </form>
+        <a href="{{ url_for('home') }}" class="back-link">Back to Home</a>
+    </div>
+</body>
+</html>
