@@ -1,46 +1,50 @@
-from flask import Flask, render_template, request, redirect, url_for  
+import re
+from flask import Flask, render_template, request, redirect, url_for, flash
 
-
-app = Flask(__name__)  # Создаем экземпляр приложения Flask,  __name__ позволяет Flask определить местоположение приложения, где находится файл вашего приложения.
-#app — это объект Flask-приложения
+app = Flask(__name__)
+app.secret_key = "supersecretkey"  # для работы flash-сообщений
 
 def add_to_file(word1: str, word2: str):
-    with open("words.txt", "a") as file:  
-        file.write(word1 + "-" + word2 + "\n")  
+    with open("words.txt", "a") as file:
+        file.write(word1 + "-" + word2 + "\n")
 
 def read_from_file():
-    with open("words.txt", "r") as file:  
-        lines = file.read().splitlines() 
-    words1, words2 = [], [] 
-    for line in lines:  
-        word1, word2 = line.split("-") 
-        words1.append(word1)  
-        words2.append(word2)  
-    return words1, words2  
+    with open("words.txt", "r") as file:
+        lines = file.read().splitlines()
+    words1, words2 = [], []
+    for line in lines:
+        word1, word2 = line.split("-")
+        words1.append(word1)
+        words2.append(word2)
+    return words1, words2
 
-@app.route("/")  
+@app.route("/")
 def home():
-    return render_template("home.html", title="My dictionary")  
+    return render_template("home.html", title="My Dictionary")
 
-@app.route("/add_word", methods=["GET", "POST"])  
-#  методы GET и POST
-
+@app.route("/add_word", methods=["GET", "POST"])
 def add_word():
-    if request.method == "POST":  
-        word1 = request.form["word1"]  
-        word2 = request.form["word2"]  
-        add_to_file(word1, word2)  # 
-        return redirect(url_for("home"))  # Перенаправляем на домашнюю страницу
-    return render_template("add_word.html", title="Add a Word")  # Если метод запроса GET
+    if request.method == "POST":
+        word1 = request.form["word1"]
+        word2 = request.form["word2"]
 
-@app.route("/words_list")  
+        # Проверка на то, что слова содержат только буквы (с помощью регулярных выражений)
+        if not re.match("^[A-Za-zА-Яа-яЁё]+$", word1) or not re.match("^[A-Za-zА-Яа-яЁё]+$", word2):
+            flash("Слова должны содержать только буквы. Пожалуйста, введите корректные слова.")
+            return redirect(url_for("add_word"))  # Перенаправление для отображения сообщения об ошибке
+
+        add_to_file(word1, word2)  # Функция для добавления в файл
+        return redirect(url_for("home"))
+
+    return render_template("add_word.html", title="Добавить слово")
+
+@app.route("/words_list")
 def words_list():
-    words1, words2 = read_from_file() 
-    words = list(zip(words1, words2))  # Объединяем words1 и words2 в список кортежей
-    return render_template("words_list.html", words=words, title="Words List")  
-    #  передаем список слов и заголовок
+    words1, words2 = read_from_file()
+    words = list(zip(words1, words2))
+    return render_template("words_list.html", words=words, title="Words List")
 
-app.run()  
+app.run()
 
 
 
