@@ -1,7 +1,7 @@
 import re
 from flask import Flask, render_template, request, redirect, url_for, flash
 
-app = Flask(__name__)
+app = Flask(__name__)#__name__ используется для определения корневого пути приложения, чтобы оно могло найти файлы, такие как шаблоны или статические файлы.
 app.secret_key = "supersecretkey"  # для работы flash-сообщений
 
 def add_to_file(word1: str, word2: str):
@@ -28,7 +28,7 @@ def add_word():
         word1 = request.form["word1"]
         word2 = request.form["word2"]
 
-        # Проверка на то, что слова содержат только буквы (с помощью регулярных выражений)
+        # Проверка на то, что слова содержат только буквы 
         if not re.match("^[A-Za-zА-Яа-яЁё]+$", word1) or not re.match("^[A-Za-zА-Яа-яЁё]+$", word2):
             flash("Слова должны содержать только буквы. Пожалуйста, введите корректные слова.")
             return redirect(url_for("add_word"))  # Перенаправление для отображения сообщения об ошибке
